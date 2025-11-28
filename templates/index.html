@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ARIMA Temperature Forecast</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
+        h1 { color: #2c3e50; }
+        table { border-collapse: collapse; width: 50%; margin-top: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); background-color: white; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #3498db; color: white; }
+        .success { color: green; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <h1>30-Day Temperature Forecast (ARIMA)</h1>
+    <p>Model Order: (5, 1, 1) - Data is currently showing predictions for {{ steps }} days.</p>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Predicted Temp (°C)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for date, temp in forecast_data.items() %}
+            <tr>
+                <td>{{ date }}</td>
+                <td class="success">{{ temp | round(4) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
