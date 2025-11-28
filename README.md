@@ -1,45 +1,70 @@
-# ARIMA Time Series Prediction Service
 
-## 💡 Overview
-The **ARIMA Prediction Service** is a lightweight, backend solution for time series forecasting. It leverages the **ARIMA** (AutoRegressive Integrated Moving Average) model, a fundamental statistical technique, to generate accurate predictions based on historical, stationary time series data.
+***
 
-This project is structured as a **service** (typically a REST API) to allow seamless integration with various front-end applications, dashboards, or other analytical pipelines.
+# Time Series Temperature Forecasting App
 
+This project is a simple end‑to‑end time series forecasting demo that downloads a daily minimum temperature dataset, trains an ARIMA model in a Jupyter notebook, and serves interactive forecasts through a Flask web app. [attached_file:file:1][attached_file:file:2]
 
+## Features
 
----
+- Downloads the classic daily minimum temperatures dataset and saves it as `data.csv`. [attached_file:file:2]  
+- Trains an ARIMA time series model on the temperature series using `statsmodels`. [attached_file:file:1][attached_file:file:2]  
+- Exposes a `/forecast` endpoint with a `steps` query parameter to control forecast horizon. [attached_file:file:1]  
+- Renders an HTML page (`index.html`) that displays the forecast produced by the Flask backend. [attached_file:file:1][attached_file:file:3]  
+- Saves a 30‑day forecast to `forecast.csv` from the notebook for offline inspection. [attached_file:file:2]
 
-## ✨ Features
+## Project Structure
 
-* **ARIMA Model Implementation:** Utilizes the `pmdarima` library for automated determination of optimal $(p, d, q)$ parameters (**Auto-ARIMA**).
-* **Data Preparation:** Includes essential preprocessing steps like handling missing values and ensuring time series stationarity (through differencing).
-* **API Service:** Hosted via **Flask** to provide a simple, scalable prediction endpoint.
-* **Model Persistence:** Trained models are saved using `pickle` to avoid retraining on every request, improving performance.
+- `project.ipynb` – Notebook that:
+  - Downloads the dataset from an online source and saves it as `data.csv`. [attached_file:file:2]
+  - Performs exploratory analysis and ARIMA model training.
+  - Generates a 30‑day forecast and writes it to `forecast.csv`. [attached_file:file:2]
+- `app.py` – Flask application that:
+  - Loads `data.csv`, prepares the daily temperature time series, and fits an ARIMA model. [attached_file:file:1]
+  - Provides the `/forecast` route to generate forecasts and pass them to the template. [attached_file:file:1]
+- `index.html` – Frontend template used by Flask to display forecast data. [attached_file:file:1][attached_file:file:3]  
+- `forecast.csv` – Example CSV file containing a saved forecast from the notebook. [attached_file:file:2]
 
----
+## Requirements
 
-## 💻 Technology Stack
+Make sure you have Python 3.10+ installed, then install the required packages:
 
-| Category | Technology | Description |
-| :--- | :--- | :--- |
-| **Language** | Python 3.x | Primary language for data science and service implementation. |
-| **Forecasting** | `pmdarima`, `statsmodels` | Libraries for efficient and robust ARIMA modeling. |
-| **Service/API** | **Flask** | A micro-web framework used to serve the prediction model as a REST API. |
-| **Data Handling** | `Pandas`, `NumPy` | Core libraries for data manipulation and numerical operations. |
+- Flask  
+- pandas  
+- numpy  
+- statsmodels  
+- matplotlib  
+- jupyter (to run the notebook)  
 
----
+You can install them with:
 
-## ⚙️ Installation and Setup
+- `pip install flask pandas numpy statsmodels matplotlib jupyter`  
 
-Follow these steps to set up and run the service locally.
+The notebook also uses standard scientific Python stack components (such as `scipy`), which will be installed as dependencies. [attached_file:file:2]
 
-### Prerequisites
+## How to Run
 
-* Python 3.8+
-* `pip` (Python package installer)
+1. Clone this repository and navigate into the project folder.  
+2. (Optional) Create and activate a virtual environment.  
+3. Run the notebook `project.ipynb` if you want to:
+   - Re‑download the dataset into `data.csv`. [attached_file:file:2]
+   - Retrain the ARIMA model or modify the analysis. [attached_file:file:2]
+4. Start the Flask app:
 
-### Step 1: Clone the Repository
+   - `python app.py` [attached_file:file:1]
 
-```bash
-git clone [https://github.com/manoj17-08/Arima-Prediction-Service.git](https://github.com/manoj17-08/Arima-Prediction-Service.git)
-cd Arima-Prediction-Service
+5. Open your browser and go to:
+
+   - `http://127.0.0.1:5002/forecast?steps=30` to view a 30‑day forecast. [attached_file:file:1]
+
+You can change the `steps` parameter (for example, `steps=7` or `steps=60`) to get different forecast horizons. [attached_file:file:1]
+
+## Notes
+
+- The ARIMA order is currently set to \((5, 1, 1)\); you can experiment with different orders in the notebook to improve performance. [attached_file:file:1][attached_file:file:2]  
+- The dataset is treated as a daily frequency series, forward‑filled to handle any gaps before modeling. [attached_file:file:1]  
+- `forecast.csv` is generated from the notebook and is not strictly required for the Flask app, which trains and forecasts directly from `data.csv`. [attached_file:file:1][attached_file:file:2]
+
+[1](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/51022286/2e7c5ba9-33cf-4e97-b513-b34a84a91ce1/app.py)
+[2](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/51022286/811551f1-3ead-48f0-98dc-82c60b2eec95/project.ipynb)
+[3](https://ppl-ai-file-upload.s3.amazonaws.com/web/direct-files/attachments/51022286/36a4b18f-41d9-4a31-b72b-6d91d1453a2b/index.html)
